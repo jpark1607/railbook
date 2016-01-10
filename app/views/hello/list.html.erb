@@ -5,7 +5,7 @@
 	</tr>
 
 <% @books.each do |book| %>
-	<tr>
+	<tr style="background-color:<%= cycle('#FFffFF', '#FFff99') %>">
 		<td><%= book.isbn %></td>
 		<td><%= book.title %></td>
 		<td><%= book.price %>원</td>
