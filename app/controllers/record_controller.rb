@@ -155,4 +155,38 @@ class RecordController < ApplicationController
 			GROUP BY publish HAVING AVG(price) >= ?', 2500])
 		render 'record/groupby'
 	end
+
+	def update_all
+		cnt = Book.where(publish: '한빛미디어').update_all(publish: '제이펍')
+		render text: "#{cnt}개의 데이터를 업데이트했습니다."
+	end
+
+	def update_all2
+		cnt = Book.order(:published).limit(5).update_all('price = price * 0.8')
+		render text: "#{cnt}개의 데이터를 업데이트했습니다."
+	end
+
+	def destroy_all
+		Book.destroy_all(['publish <> ?', '제이펍'])
+		#Book.where('publish <> ?', '제이펍').destroy_all
+		render text: '제거 완료'
+	end
+
+	def transact
+			Book.transaction do
+				b1 = Book.new({isbn: '978-4-7741-4223-0',
+					title: 'Ruby 포켓 레퍼런스',
+					price: 2000, publish: '제이펍', published: '2011-01-01'})
+				b1.save!
+				raise '예외 발생: 모든 처리를 취소합니다.'
+				b2 = Book.new({isbn: '978-4-7741-4223-2',
+					title: 'Tomcat 포켓 레퍼런스',
+					price: 2500, publish: '제이펍', published: '2011-01-01'})
+				b2.save!
+			end
+			render text: '트랜잭션에 성공했습니다.'
+		rescue => e
+			render text: e.message
+	end
+			
 end
