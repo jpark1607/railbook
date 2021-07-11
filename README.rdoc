@@ -1,3 +1,4 @@
 Practicing RoR by using book "퍼펙트 루비 온 레일즈"
 
 test commit
+test commit 2
